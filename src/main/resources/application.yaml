@@ -1,0 +1,34 @@
+spring:
+  main:
+    web-application-type: reactive
+  cloud:
+    gateway:
+      prefix: /api
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: app1
+          uri: http://localhost:8081/app1/
+          predicates:
+            - Path=/gateway/app1/**
+          filters:
+            - StripPrefix=1
+        - id: app2
+          uri: http://localhost:8082/app2/
+          predicates:
+            - Path=/gateway/app2/**
+          filters:
+            - StripPrefix=1
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://localhost:8085/eureka/
+
+server:
+  port: 8080
